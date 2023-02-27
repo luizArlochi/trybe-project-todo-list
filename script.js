@@ -10,36 +10,46 @@ buttonCreateTask.addEventListener('click', () => {
   if (textTask !== '') {
     const newTask = {
       task: textTask,
-      timestamp: Date.now(),
       completed: false,
     };
     tasks.push(newTask);
-    tasks.sort((a, b) => a.timestamp - b.timestamp);
     updateTaskList();
     textArea.value = '';
   }
 });
 
+function createTaskElement(task) {
+  const newTask = document.createElement('li');
+  newTask.innerText = task.task;
+  newTask.addEventListener('click', () => {
+    if (selectedTask !== null) {
+      selectedTask.style.backgroundColor = '';
+    }
+    newTask.style.backgroundColor = 'gray';
+    selectedTask = newTask;
+  });
+  newTask.addEventListener('dblclick', () => {
+    task.completed = !task.completed;
+    updateTaskList();
+  });
+  if (task.completed) {
+    newTask.classList.add('completed');
+  }
+  return newTask;
+}
+
 function updateTaskList() {
   taskList.innerHTML = '';
   tasks.forEach((task) => {
-    const newTask = document.createElement('li');
-    newTask.innerText = task.task;
-    newTask.addEventListener('click', () => {
-      if (selectedTask !== null) {
-        selectedTask.style.backgroundColor = '';
-      }
-      newTask.style.backgroundColor = 'gray';
-      selectedTask = newTask;
-    });
-    newTask.addEventListener('dblclick', () => {
-      task.completed = !task.completed;
-      updateTaskList();
-    });
-    if (task.completed) {
-      newTask.classList.add('completed');
-    }
+    const newTask = createTaskElement(task);
     taskList.appendChild(newTask);
   });
 }
 
+const botaoApagaTudo = document.getElementById('apaga-tudo');
+
+botaoApagaTudo.addEventListener('click', () => {
+  while (taskList.firstChild) {
+    taskList.removeChild(taskList.firstChild);
+  }
+});
