@@ -46,10 +46,24 @@ function updateTaskList() {
   });
 }
 
-const botaoApagaTudo = document.getElementById('apaga-tudo');
+const buttonClearTasks = document.getElementById('apaga-tudo');
 
-botaoApagaTudo.addEventListener('click', () => {
+buttonClearTasks.addEventListener('click', () => {
   while (taskList.firstChild) {
     taskList.removeChild(taskList.firstChild);
   }
 });
+
+function removeCompletedItems() {
+  const completedItems = taskList.querySelectorAll('.completed');
+  completedItems.forEach((item) => {
+    item.remove();
+  });
+}
+
+const buttonClearCompleteTasks = document.getElementById('remover-finalizados');
+buttonClearCompleteTasks.addEventListener('click', () => {
+  removeCompletedItems();
+});
+
+document.body.appendChild(buttonClearCompleteTasks);
