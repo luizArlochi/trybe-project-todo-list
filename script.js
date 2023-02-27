@@ -1,7 +1,7 @@
 const buttonCreateTask = document.getElementById('criar-tarefa');
 const textArea = document.getElementById('texto-tarefa');
 const taskList = document.getElementById('lista-tarefas');
-let tasks = [];
+const tasks = [];
 let selectedTask = null;
 
 buttonCreateTask.addEventListener('click', () => {
@@ -67,3 +67,41 @@ buttonClearCompleteTasks.addEventListener('click', () => {
 });
 
 document.body.appendChild(buttonClearCompleteTasks);
+
+function saveTaskList() {
+  const tasksArray = Array.from(taskList.children).map((task) => {
+    return {
+      task: task.innerText,
+      completed: task.classList.contains('completed'),
+    };
+  });
+
+  localStorage.setItem('tasks', JSON.stringify(tasksArray));
+}
+
+function loadTaskList() {
+  const tasksJSON = localStorage.getItem('tasks');
+
+  if (tasksJSON !== null) {
+    const tasksArray = JSON.parse(tasksJSON);
+    tasksArray.forEach((task) => {
+      const newTask = document.createElement('li');
+      newTask.innerText = task.task;
+      if (task.completed) {
+        newTask.classList.add('completed');
+      }
+      taskList.appendChild(newTask);
+    });
+  }
+}
+
+const buttonSaveTasks = document.getElementById('salvar-tarefas');
+buttonSaveTasks.addEventListener('click', () => {
+  saveTaskList();
+});
+
+window.addEventListener('load', () => {
+  loadTaskList();
+});
+
+document.body.appendChild(buttonSaveTasks);
