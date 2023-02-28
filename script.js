@@ -18,9 +18,9 @@ buttonCreateTask.addEventListener('click', () => {
   }
 });
 
-function createTaskElement(task) {
+function createTaskElement(element) {
   const newTask = document.createElement('li');
-  newTask.innerText = task.task;
+  newTask.innerText = element.task;
   newTask.addEventListener('click', () => {
     if (selectedTask !== null) {
       selectedTask.style.backgroundColor = '';
@@ -29,12 +29,13 @@ function createTaskElement(task) {
     selectedTask = newTask;
   });
   newTask.addEventListener('dblclick', () => {
-    task.completed = !task.completed;
-    updateTaskList();
+    element.completed = !element.completed;
+    if (element.completed) {
+      newTask.classList.add('completed');
+    } else {
+      newTask.classList.remove('completed');
+    }
   });
-  if (task.completed) {
-    newTask.classList.add('completed');
-  }
   return newTask;
 }
 
